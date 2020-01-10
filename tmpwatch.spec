@@ -1,7 +1,7 @@
 Summary: A utility for removing files based on when they were last accessed
 Name: tmpwatch
 Version: 2.9.16
-Release: 5%{?dist}
+Release: 6%{?dist}
 URL: https://fedorahosted.org/tmpwatch/
 Source0: https://fedorahosted.org/releases/t/m/tmpwatch/tmpwatch-%{version}.tar.bz2
 Source1: tmpwatch.daily
@@ -54,6 +54,11 @@ rm -rf %{buildroot}
 %config(noreplace) /etc/cron.daily/tmpwatch
 
 %changelog
+* Fri Nov 6 2015 Miloslav Trmač <mitr@redhat.com> - 2.9.16-6
+- Do not remove Python multiprocessing sockets.  Patch by Chris St. Pierre
+  <chris.a.st.pierre@gmail.com>.
+  Resolves: #1058310
+
 * Wed Oct 14 2015 Miloslav Trmač <mitr@redhat.com> - 2.9.16-5
 - Exclude SAP HANA lock files. Patch by Luca Miccini <lmiccini@redhat.com>
   Resolves: #1185244
