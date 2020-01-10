@@ -1,7 +1,7 @@
 Summary: A utility for removing files based on when they were last accessed
 Name: tmpwatch
 Version: 2.9.16
-Release: 4%{?dist}
+Release: 5%{?dist}
 URL: https://fedorahosted.org/tmpwatch/
 Source0: https://fedorahosted.org/releases/t/m/tmpwatch/tmpwatch-%{version}.tar.bz2
 Source1: tmpwatch.daily
@@ -54,6 +54,10 @@ rm -rf %{buildroot}
 %config(noreplace) /etc/cron.daily/tmpwatch
 
 %changelog
+* Wed Oct 14 2015 Miloslav Trmač <mitr@redhat.com> - 2.9.16-5
+- Exclude SAP HANA lock files. Patch by Luca Miccini <lmiccini@redhat.com>
+  Resolves: #1185244
+
 * Wed Jul 27 2011 Miloslav Trmač <mitr@redhat.com> - 2.9.16-4
 - Don't report EACCES errors, they can be routinely returned on FUSE mounts
   Resolves: #722856
