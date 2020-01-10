@@ -1,11 +1,12 @@
 Summary: A utility for removing files based on when they were last accessed
 Name: tmpwatch
 Version: 2.9.16
-Release: 3%{?dist}
+Release: 4%{?dist}
 URL: https://fedorahosted.org/tmpwatch/
 Source0: https://fedorahosted.org/releases/t/m/tmpwatch/tmpwatch-%{version}.tar.bz2
 Source1: tmpwatch.daily
 Patch0: tmpwatch-2.9.16-fuser.patch
+Patch1: tmpwatch-2.9.16-EACCES.patch
 License: GPLv2
 Group: System Environment/Base
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -22,6 +23,7 @@ removes empty directories and regular files.
 %prep
 %setup -q
 %patch0 -p1 -b .fuser
+%patch1 -p1 -b .EACCES
 
 %build
 make %{?_smp_mflags}
@@ -52,6 +54,10 @@ rm -rf %{buildroot}
 %config(noreplace) /etc/cron.daily/tmpwatch
 
 %changelog
+* Wed Jul 27 2011 Miloslav Trmač <mitr@redhat.com> - 2.9.16-4
+- Don't report EACCES errors, they can be routinely returned on FUSE mounts
+  Resolves: #722856
+
 * Mon Feb  1 2010 Miloslav Trmač <mitr@redhat.com> - 2.9.16-3
 - Ship COPYING
   Resolves: #560690

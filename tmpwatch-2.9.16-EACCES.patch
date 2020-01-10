@@ -1,0 +1,13 @@
+diff -urN tmpwatch/tmpwatch.c tmpwatch-2.9.16/tmpwatch.c
+--- tmpwatch/tmpwatch.c	2011-07-27 18:03:44.627671042 +0200
++++ tmpwatch-2.9.16/tmpwatch.c	2011-07-27 18:05:32.161718592 +0200
+@@ -346,7 +346,8 @@
+ 	if (!ent) break;
+ 
+ 	if (lstat(ent->d_name, &sb)) {
+-	    if (errno != ENOENT)
++	    /* FUSE mounts by different users return EACCES by default. */
++	    if (errno != ENOENT && errno != EACCES)
+ 		message(LOG_ERROR, "failed to lstat %s/%s: %s\n",
+ 			fulldirname, ent->d_name, strerror(errno));
+ 	    continue;
