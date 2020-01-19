@@ -1,9 +1,9 @@
 Summary: A utility for removing files based on when they were last accessed
 Name: tmpwatch
 Version: 2.11
-Release: 5%{?dist}
-URL: https://fedorahosted.org/tmpwatch/
-Source0: https://fedorahosted.org/releases/t/m/tmpwatch/tmpwatch-%{version}.tar.bz2
+Release: 6%{?dist}
+URL: https://pagure.io/%{name}
+Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 License: GPLv2
 Group: System Environment/Base
 Requires: psmisc
@@ -23,7 +23,7 @@ removes empty directories and regular files.
 %setup -q
 
 %build
-%configure
+%configure --with-fuser=/usr/sbin/fuser
 make %{?_smp_mflags}
 
 %install
@@ -41,6 +41,11 @@ ln -s $(echo %{_bindir} |sed 's,/[^/]\+,/..,g; s,^/,,')%{_sbindir}/tmpwatch \
 %{_mandir}/man8/tmpwatch.8*
 
 %changelog
+* Mon Feb 18 2019 Jiri Kucera <jkucera@redhat.com> - 2.11-6
+- Added --fuser option support.
+- Fixed bad URL, Source0, and bogus date in spec.
+  Resolves: #1330328
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.11-5
 - Mass rebuild 2014-01-24
 
@@ -227,7 +232,7 @@ ln -s $(echo %{_bindir} |sed 's,/[^/]\+,/..,g; s,^/,,')%{_sbindir}/tmpwatch \
 * Tue May 21 2002 Mike A. Harris <mharris@redhat.com> 2.8.4-1
 - Bump release and rebuild in new environment
 
-* Fri Apr 13 2002 Mike A. Harris <mharris@redhat.com> 2.8.3-1
+* Sat Apr 13 2002 Mike A. Harris <mharris@redhat.com> 2.8.3-1
 - Added support for large files with 64bit offsets by adding to CFLAGS
   -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 bug (#56961)
 
