@@ -1,0 +1,41 @@
+2.11
+* INCOMPATIBLE CHANGE: On Linux, sockets that are certainly unused are now
+  removed by default.
+
+2.10.3
+* Don't report EACCES errors, they can be routinely returned by FUSE mounts.
+* Minor bug fixes in bind mount handling.
+
+2.10.2
+* Don't follow (non-trivial) bind mounts.
+* Minor bug and documentation fixes.
+
+2.10.1
+* Fix Ben Walton's e-mail address
+* Drop obsolete HP-UX warning in tmpwatch.8.
+
+2.10
+* Migrate to autotools, use gnulib for portability to non-Linux systems.
+  Most work done by Ben Walton <bwalton@artsci.utoronto.ca>.
+* Only support fuser if it is available at build time.  Handle fuser
+  implementation that don't support the `-s' option.  Patches by Ben Walton
+  <bwalton@artsci.utoronto.ca>.
+
+2.9.17
+* Fix handling of filenames starting with '-' with --fuser.
+
+2.9.16
+* Add --exclude-pattern.
+* Support specifying time in minutes.
+
+2.9.15
+* A small portability improvement.
+
+2.9.14
+* Fix an incorrect message in verbose mode (#3).
+* Ship the GPLv2 text (#2).
+* Fix build on Mac OS X and perhaps Solaris as well (#1, #4).
+
+2.9.13
+* New home page at https://fedorahosted.org/tmpwatch/ .
+* tmpwatch is now licensed under GPLv2.

@@ -1,0 +1,252 @@
+2012-05-26  Miloslav Trmač  <mitr@redhat.com>
+
+	* configure.ac: Release 2.11.
+	* NEWS: Update.
+
+	* tmpwatch.c (FLAG_ALLFILES): Update comment.
+	(socket_kill_time): New variable, taking over FLAG_ALLFILES handling
+	for sockets.
+	(cleanupDirectory): Use socket_kill_time for sockets, and depend on it
+	for FLAG_ALLFILES handling of sockets.
+	(main): Move kill_time initialization ...
+	(compute_kill_times): ... to this new function.  Set socket_kill_time
+	to (time of last boot - grace period) on Linux.
+	* tmpwatch.8: Document that unused socketes may be removed, and that
+	-a reverts to purely time-based behavior for them.
+	* m4/gnulib-cache.m4: Add module clock-time.
+	* Makefile.am (tmpwatch_LDADD): Use libraries necessary for
+	clock_gettime ().
+
+2012-05-25  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (cleanupDirectory): Simplify control flow a little.
+
+	* tmpwatch.c (check_fuser, cleanupDirectory): Remove unnecessary
+	parentheses.
+
+	* tmpwatch.c (safe_chdir, cleanupDirectory, main): Replace implicit
+	comparisions to zero with explicit comparisons.
+
+	* tmpwatch.c (kill_time, config_flags): New variables.
+	(cleanupDirectory): Use `kill_time' and `config_flags' instead of
+	passing around parameters `killTime' and `flags'.
+	(main): Use `kill_time' and `config_flags' instead of local variables
+	`killTime' and `flags'.
+
+	* bind-mount.c (bind_mount_paths_index): Remove an unused variable.
+	(is_bind_mount): Stop setting bind_mount_paths_index.
+
+2011-07-19  Miloslav Trmač  <mitr@redhat.com>
+
+	* configure.ac: Release 2.10.3.
+	* NEWS: Update.
+
+	* tmpwatch.c (cleanupDirectory): Ignore EACCES on lstat(), this can be
+	routinely returned by FUSE.
+
+2011-04-28  Miloslav Trmač  <mitr@redhat.com>
+
+	* bind-mount.c (read_mount_entry): Fix an EOF check.
+
+2011-03-31  Miloslav Trmač  <mitr@redhat.com>
+
+	* bind-mount.c (read_mount_line): Remove an unused variable.
+
+2011-03-31  Miloslav Trmač  <mitr@redhat.com>
+
+	* configure.ac: Release 2.10.2.
+	* NEWS: Update.
+
+	* m4/gnulib-cache.m4: Remove stat-time and timespec again.
+
+	* bind-mount.c: Use __linux for #ifdef.
+	(MOUNTINFO_PATH, OBSTACK_OBJECT_SIZE, struct mount, mount_entries)
+	(num_mount_entries, mount_data_obstack, mount_data_mark)
+	(mount_string_obstack, mount_string_mark, mount_list_obstack)
+	(mountinfo_line_obstack, init_mount_entries, read_mount_line)
+	(parse_mount_string, read_mount_entry, read_mount_entries): New
+	definitions, reading /proc/self/mountinfo.
+	(mountinfo_fd): New variable.
+	(last_path_mounted_mtime): Removed variable.
+	(cmp_ints, cmp_mount_entry_pointers, cmp_id_mount_entry): New functions.
+	(rebuild_bind_mount_paths, is_bind_mount, bind_mount_init): Use data
+	from /proc/self/mountinfo.
+
+	* bind-mount.c (bind_mount_init): Rename from init_bind_mount_paths ().
+	All users changed.
+	* bind-mount.h (bind_mount_init): Rename from init_bind_mount_paths ().
+
+2011-03-21  Miloslav Trmač  <mitr@redhat.com>
+
+	* HACKING: New file.
+
+	* bind-mount.h:
+	* bind-mount.c: New files, based on mlocate.
+	* Makefile.am (tmpwatch_SOURCES): Add bind-mount.[ch].
+	* tmpwatch.c (cleanupDirectory): Skip non-trivial bind mounts.  Silence
+	errors when trying to remove an empty (bind) mount point.
+	(main): Initialize data for is_bind_mount().
+	* tmpwatch.8: Document that bind mounts are skipped.
+
+	* m4/gnulib-cache.m4: Add `stat-time', `timespec'.
+	* lib/stat-time.h: Silence some warnings.
+
+2011-03-11  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (cleanupDirectory): Close "dir" on error.
+	(cleanupDirectory): Remove an unnecessary assignment.
+	(message): Call va_end().
+
+2010-08-07  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (usage): Add missing space.
+
+	* tmpwatch.8: Add -X to SYNOPSIS as well.
+
+	* tmpwatch.c (usage): Mention -X, --exclude-pattern.
+	* tmpwatch.8: Add --exclude-pattern to SYNOPSIS.
+
+2010-07-23  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.8: Fix description of --force.
+
+2010-06-12  Miloslav Trmač  <mitr@redhat.com>
+
+	* configure.ac: Define PACKAGE_URL.
+
+2010-03-23  Miloslav Trmač  <mitr@redhat.com>
+
+	* configure.ac: Release 2.10.1.
+	* NEWS: Update.
+
+	* NEWS: Fix Ben Walton's e-mail address.
+
+	* tmpwatch.8 (WARNINGS): Drop, gnulib's getopt supports long options.
+
+	* Makefile.am (archive): Drop, the target requires a specific gnulib
+	checkout.
+
+	* configure.ac: Release 2.10.
+	* NEWS: Update.
+
+2010-03-23  Ben Walton  <bwalton@artsci.utoronto.ca>
+
+	* tmpwatch.c (check_fuser): s/FUSER_PATH/FUSER/ in one more place.
+
+2010-03-22  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (check_fuser): Move the check for FUSER existence from
+	callers.  Only check if FUSER exists once.  All callers updated.
+
+	* configure.ac: Check if fuser supports -s.
+	* tmpwatch.c (check_fuser): Redirect stdout and stderr instead of using
+	-s if !FUSER_ACCEPTS_S.
+	All based on a patch by Ben Walton <bwalton@artsci.utoronto.ca>
+	(FUSER_ARGS): Remove, simply use "-s" directly.
+
+	* configure.ac: Search for fuser, check if it works.  Define FUSER.
+	* tmpwatch.c: Remove FUSER_PATH.  Replace all uses with FUSER.
+	(check_fuser): Just #define to 0 if !FUSER.
+	(usage): Mention --fuser if supported.
+	(main): Only recognize --fuser if supported.
+	All based on a patch by Ben Walton <bwalton@artsci.utoronto.ca>
+
+2010-03-12  Miloslav Trmač  <mitr@redhat.com>
+
+	* m4/gnulib-cache.m4 (gl_MODULES): Add `progname'.
+	* tmpwatch.c (main): Call set_program_name.
+
+2010-03-09  Miloslav Trmač  <mitr@redhat.com>
+
+	* lib/strerror.c: Fix missing #include <limits.h>.
+
+2010-03-03  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (struct exclusion): Use `const char *' for `dir' and
+	`file'.
+	(message): Use `const char *' for `format'.
+	(cleanupDirectory): Don't use two local variables named `dir'.
+	(usage): Use attribute__((noreturn)).
+
+	* tmpwatch.c (xmalloc): Remove (use the gnulib implementation).
+	(absolute_path): Use xstrdup() from gnulib.
+	* m4/gnulib-cache.m4 (gl_MODULES): Add `xalloc'.
+
+	* AUTHORS: New file.
+	* configure.ac, Makefile.am: New files, based on patches by Ben
+	Walton <bwalton@artsci.utoronto.ca>.
+	* tmpwatch.c: #include <config.h>.  Guard <mntent.h> and <paths.h>
+	with HAVE_MNTENT_H and HAVE_PATHS_H.  Use PACKAGE_VERSION.  Based
+	on patches by Ben Walton <bwalton@artsci.utoronto.ca>.
+	* install-sh
+	* Makefile
+	* README.ports: Remove.
+
+2009-12-22  Miloslav Trmač  <mitr@redhat.com>
+
+	* Makefile (VERSION): Release 2.9.17.
+	* NEWS: Update.
+
+	* tmpwatch.c (check_fuser): Use PATH_MAX, not FILENAME_MAX; the POSIX
+	definition of FILENAME_MAX does not match the intended usage.
+	(check_fuser): Prefix filename with "./" to handle filenames starting
+	with '-'.
+
+2009-10-15  Miloslav Trmač  <mitr@redhat.com>
+
+	* Makefile (VERSION): Version 2.9.16.
+	* NEWS: Update.
+
+	* tmpwatch.c (main): Support 'm' unit specifier, meaning "minutes".
+	* tmpwatch.8: Document the 'm' unit specifier.
+
+	* tmpwatch.c (struct excluded_pattern, excluded_patterns)
+	(excluded_patterns_tail, main): New option --exclude-pattern.
+	(cleanupDirectory): Implement --exclude-pattern.
+	* tmpwatch.8: Document --exclude-pattern.
+
+2009-05-22  Miloslav Trmač  <mitr@redhat.com>
+
+	* Makefile (VERSION): Version 2.9.15.
+	* NEWS: Update.
+
+2009-03-25  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (logLevel, message, safe_chdir, check_fuser, max)
+	(cleanupDirectory, printCopyright, usage): Make static.
+
+	* tmpwatch.c (printCopyright): Update copyright year.
+
+	* tmpwatch.c (check_fuser): Don't pass NULL as environment pointer,
+	it is undefined by POSIX.
+
+2009-03-23  Miloslav Trmač  <mitr@redhat.com>
+
+	* Makefile (VERSION): Version 2.9.14.
+	* NEWS: Update.
+
+	* tmpwatch.c: Only #include mntent.h on Linux.
+	(is_mount_point): Only define on Linux, it is only used on Linux.
+
+2009-02-05  Miloslav Trmač  <mitr@redhat.com>
+
+	* tmpwatch.c (cleanupDirectory): Fix an incorrect message (#3).
+
+2008-11-11  Miloslav Trmač  <mitr@redhat.com>
+
+	* COPYING: New file.
+
+2008-02-23  Miloslav Trmač  <mitr@redhat.com>
+
+	* Makefile (VERSION): Version 2.9.13.
+
+	* NEWS
+	* README: New file.
+
+	* Makefile (HGTAG): Replace CVSTAG.
+	(force-tag, tag, archive): Update for Mercurial.
+
+	* tmpwatch.c: Relicense to GPLv2.  Update Red Hat copyright message.
+	(printCopyright): Update.
+
+	* tmpwatch.8: Add a copyright message.
